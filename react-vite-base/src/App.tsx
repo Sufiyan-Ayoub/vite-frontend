@@ -13,7 +13,8 @@ import OauthLayout from './layouts/OauthLayout';
 import { Toaster } from '@/comps';
 import { _removeAppLoader } from '@/cores';
 import MainLayout from './layouts/MainLayout';
-
+import { ProductList, AddProduct } from './pages/products';
+import ProductProvider from './pages/products/Provider';
 const Root = () => {
 	
 	useEffect(() => {
@@ -40,7 +41,13 @@ const router = createBrowserRouter(
 			</Route>
 			
 			<Route path={`/dashboard`} element={<MainLayout />}>
-				
+				<Route path="products" element={<ProductProvider><Outlet /></ProductProvider>}>
+					<Route index element={<ProductList />} />
+					<Route path="create" element={<AddProduct />} />
+					{/* <Route path=":id" element={<ProductsDetail />} />
+					<Route path=":id/edit" element={<ProductsEdit />} /> */}
+				</Route>
+					
 			</Route>
 
 			{/* <Route path={`/admin`} elemen={} errorElement={<ErrorRoot />} >

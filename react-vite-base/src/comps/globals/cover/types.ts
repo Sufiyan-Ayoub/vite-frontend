@@ -1,4 +1,4 @@
-export type CoverProps = { msg?: string };
+export type CoverProps = { msg?: string, fullMode?: boolean };
 export type CoverHandler = {
     setLoading: (state: boolean) => void;
     open: () => void;

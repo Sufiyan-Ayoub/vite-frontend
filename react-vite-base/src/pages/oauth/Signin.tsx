@@ -1,7 +1,7 @@
 import { Button } from "@/ui/button"
 import { Input } from "@/ui/input"
 import { Label } from "@/ui/label"
-import { FC, useMemo, useRef } from "react"
+import { FC, useEffect, useMemo, useRef } from "react"
 import {
     Card,
     CardContent,
@@ -24,22 +24,17 @@ const Signin: FC = () => {
     const form = useRef<HTMLDivElement>(null)
     const cover = useRef<CoverHandler>(null)
 
-    const mounted = useMounted()
-    const anim = useMemo(() => {
-        if ( mounted ){
-            cover.current?.close()
-        }
-        return ({
-            transition: TRANSITIONS.SlideTop,
-            curve: TRANSITION_CURVES.Bounce,
-            when: mounted,
-            duration: 1
-        })
-    }, [mounted]);
-
+    const mounted = useMounted()    
+    const anim = useMemo(() => ({
+        transition: TRANSITIONS.SlideTop,
+        curve: TRANSITION_CURVES.Bounce,
+        when: mounted,
+        duration: 1
+    }), [mounted]);
+    
     const onSignin = () => {
-        
-        if (!form.current) return toast.error(`Something went wrong!`, TriangleAlert)
+        console.log(form.current)
+        if (!form.current) return toast.error(`Something went wrong!`, TriangleAlert);
         const { em, psw } = getData(form.current) as { em?: string, psw?: string }
 
         
@@ -49,7 +44,7 @@ const Signin: FC = () => {
             cover.current?.open()
             withPost<{ message: string, token?: string }>(
                 `/__/u/signin`,
-                { em, psw }
+                { em, psw, p: `e` }
             )
                 .then(({ message, token }) => {
                     cover.current?.close()
@@ -66,6 +61,12 @@ const Signin: FC = () => {
         }
 
     }
+
+    useEffect(() => {
+        if ( mounted ){
+            cover.current?.close()
+        }
+    }, [mounted])
 
     return (<>
         <Cover ref={cover} />
@@ -98,7 +99,7 @@ const Signin: FC = () => {
                                         Or continue with
                                     </span>
                                 </div>
-                                <div className="grid gap-6">
+                                <div ref={form} className="grid gap-6">
                                     <div className="grid gap-3">
                                         <Label htmlFor="email">Email</Label>
                                         <Input

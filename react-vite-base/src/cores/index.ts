@@ -1,4 +1,4 @@
-import { dynamic, ToastCallback, ToastType } from "@/types/utils";
+import { dynamic, FileInfo, FileStatus, ToastCallback, ToastType } from "@/types/utils";
 import axios, { AxiosProgressEvent, RawAxiosRequestHeaders } from "axios";
 import { clsx, type ClassValue } from "clsx"
 import { ElementType } from "react";
@@ -282,3 +282,24 @@ export const withGet = async <T>(uri: string, timeout:number = 60, ignoreKind: b
         });
     });
 }
+export const uuid = (len?: number) => {
+  let uuid = ``;
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let i = 0; i < (len || 4); i++) {
+    uuid += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return uuid;
+}
+
+export const getFileInfo = (f: File, ID?: string): FileInfo => ({
+  ID: ID || uuid(6),
+  name: f.name,
+  type: f.type,
+  size: f.size,
+  progress: 0,
+  uri: URL.createObjectURL(f),
+  url: null,
+  status: FileStatus.InQue,
+});
+
+export {default as Uploader} from './uploader'

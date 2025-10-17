@@ -1,7 +1,7 @@
 import { Button } from "@/ui/button"
 import { Input } from "@/ui/input"
 import { Label } from "@/ui/label"
-import { FC, useMemo, useRef, useState } from "react"
+import { FC, useEffect, useMemo, useRef, useState } from "react"
 import {
     Card,
     CardContent,
@@ -21,21 +21,15 @@ import { CoverHandler } from "@/comps/globals/cover/types"
 const Signup: FC = () => {
     const form = useRef<HTMLDivElement>(null)
     const cover = useRef<CoverHandler>(null)
-
     const navigate = useNavigate()
     
     const mounted = useMounted()    
-    const anim = useMemo(() => {
-        if ( mounted ){
-            cover.current?.close()
-        }
-        return ({
-            transition: TRANSITIONS.SlideTop,
-            curve: TRANSITION_CURVES.Bounce,
-            when: mounted,
-            duration: 1
-        })
-    }, [mounted]);
+    const anim = useMemo(() => ({
+        transition: TRANSITIONS.SlideTop,
+        curve: TRANSITION_CURVES.Bounce,
+        when: mounted,
+        duration: 1
+    }), [mounted]);
 
     const onSignup = () => {
         if (!form.current) return toast.error(`Something went wrong!`, TriangleAlert)
@@ -65,6 +59,12 @@ const Signup: FC = () => {
         }
 
     }
+
+    useEffect(() => {
+        if ( mounted ){
+            cover.current?.close()
+        }
+    }, [mounted])
 
     return (<>
         <Cover ref={cover} />
