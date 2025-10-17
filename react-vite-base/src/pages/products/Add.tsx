@@ -4,95 +4,12 @@ import { Input } from '@/ui/input'
 import { Head } from '@/pages/comps'
 import { Select, TabSelect } from '@/comps'
 import { Label } from '@/ui/label'
-import { Eye, Plus, UploadIcon } from 'lucide-react'
-import {
-    Sheet,
-    SheetContent,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/ui/sheet"
+import { Eye, UploadIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { getData, getFileInfo, toast, Uploader } from '@/cores'
 import { dynamic, FileInfo } from '@/types/utils'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/ui/dialog'
-
-
-
-const AddVariant = () => {
-    return <Sheet>
-        <SheetTrigger asChild>
-            <Button variant="secondary">
-                <Plus size={16} /> Add Variant
-            </Button>
-        </SheetTrigger>
-        <SheetContent>
-            <SheetHeader>
-                <SheetTitle>Add Variant</SheetTitle>
-            </SheetHeader>
-            <div className="grid flex-1 auto-rows-min gap-6 px-4">
-                <Button variant={`secondary`} size={`sm`}>
-                    <UploadIcon />
-                    Select Variant Image
-                </Button>
-                <div className="grid gap-3">
-                    <Label>Variant Name</Label>
-                    <Input type={`text`} placeholder={`Variant name`} />
-                </div>
-                <div className='flex flex-col gap-4 p-4 border rounded'>
-                    <Label>Inventory</Label>
-                    <div className='flex flex-col gap-2'>
-                        <Input type='number' name={`quantity`} placeholder={`Quantity`} />
-                        <Input name={`sku`} placeholder={`SKU (optional)`} />
-                        <Input name={`barcode`} placeholder={`Barcode (optional)`} />
-                        <Input type='number' name={`minstock`} placeholder='Min Stock (optional)' />
-                        <Input type='number' name={`maxstock`} placeholder='Max Stock (optinoal)' />
-                    </div>
-                </div>
-                {/* pricing */}
-                {/* <div className='flex flex-col gap-4 p-4 border rounded'>
-                    <Label>Pricing</Label>
-                    <div className='flex flex-col gap-2'>
-                        <Input type={`number`} name={`price`} placeholder={`Enter product price.`} />
-                        <Input type={`number`} name={`costPerItem`} placeholder={`Enter product cost per item.`} />
-                    </div>
-                </div> */}
-                <div className='flex flex-col gap-4 p-4 border rounded'>
-                    <Label className='font-bold'>Pricing</Label>
-                    <div className='flex flex-col gap-4'>
-                        <div className="flex gap-2">
-                            <div className="flex-1 flex flex-col gap-2">
-                                <Label>Price</Label>
-                                <Input type={`number`} name={`price`} placeholder={`Price`} />
-                            </div>
-                            <div className="flex-1 flex flex-col gap-2">
-                                <Label>CostPerItem</Label>
-                                <Input type={`number`} name={`costPerItem`} placeholder={`CostPerItem`} />
-                            </div>
-                        </div>
-                        <div className="flex gap-2">
-                            <div className="flex-1 flex flex-col gap-2">
-                                <Label>Profit</Label>
-                                <Input type={`number`} disabled name={`profit`} placeholder={`--`} />
-                            </div>
-                            <div className="flex-1 flex flex-col gap-2">
-                                <Label>Margin</Label>
-                                <Input type={`number`} disabled name={`margin`} placeholder={`--`} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <SheetFooter>
-                <Button type="submit" className='self-start'>Save Changes</Button>
-                {/* <SheetClose asChild>
-                    <Button variant="outline">Close</Button>
-                </SheetClose> */}
-            </SheetFooter>
-        </SheetContent>
-    </Sheet>
-}
+import AddVariant from './AddVariant'
 
 const AddProduct = () => {
     const form = useRef<HTMLDivElement>(null);
@@ -129,7 +46,6 @@ const AddProduct = () => {
         }
     }
 
-
     const onChange = (file: FileInfo) => {
         // console.log(`[@change-event]:`,file);
         // const node = doc.current?.querySelectorAll(`.meta-poster-${file.ID}`);       
@@ -147,8 +63,7 @@ const AddProduct = () => {
         // }
     }
 
-
-     const onComplete = (f: FileInfo, resp: dynamic ) => {
+    const onComplete = (f: FileInfo, resp: dynamic ) => {
         // console.log(`[@complete-event]`, f, resp);
         console.log(resp)
         setMedia(prev => ([ ...prev, resp.i]))
@@ -160,7 +75,6 @@ const AddProduct = () => {
             return newCount;
         });
     }
-
 
     const onSubmit = () => {
         if (!form.current) return toast.error(`Something went wrong.`);
@@ -296,10 +210,7 @@ const AddProduct = () => {
                             </div>
                         )}
                     </div>
-                       
 
-                        {/*  */}
-                    
                     {/* inventory */}
                     <div className='flex flex-col gap-4 p-4 border rounded'>
                         <Label className='font-bold'>Inventory</Label>
@@ -376,4 +287,5 @@ const AddProduct = () => {
         </div>
     )
 }
+
 export default AddProduct
