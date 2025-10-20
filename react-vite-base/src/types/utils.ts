@@ -26,11 +26,11 @@ export enum FileStatus {
 
 export type FileInfo = {
     ID: string;
-    size: number;
-    name: string;
-    type: string;
-    progress: number;
-    status: FileStatus
+    size?: number;
+    name?: string;
+    type?: string;
+    progress?: number;
+    status?: FileStatus
     uri?: string;
     url?: string | null;
     cancelRequest?: (() => void) | null

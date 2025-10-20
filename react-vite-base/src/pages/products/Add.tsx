@@ -4,21 +4,23 @@ import { Input } from '@/ui/input'
 import { Head } from '@/pages/comps'
 import { Select, TabSelect } from '@/comps'
 import { Label } from '@/ui/label'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { getData, toast } from '@/cores'
 import AddVariant from './AddVariant'
-import { useStore } from '@pex-craft/store'
-import { Store } from '@/store'
+// import { useStore } from '@pex-craft/store'
+// import { Store } from '@/store'
 import Media from './Media'
+import { ProductStatus } from '@/types'
+import { UOMOptions } from '@/config'
 
 const AddProduct = () => {
     const form = useRef<HTMLDivElement>(null);
-    const { media, dispatch } = useStore(Store.Products)
+    // const { media, dispatch } = useStore(Store.Products)
 
     const onSubmit = () => {
         if (!form.current) return toast.error(`Something went wrong.`);
         const data = getData(form.current)
-        console.log(media)
+        // console.log(media)
         console.log(data);
     }
 
@@ -43,10 +45,10 @@ const AddProduct = () => {
                     <TabSelect
                         name={`status`}
                         options={[
-                            { label: `Draft`, value: `draft` },
-                            { label: `In Active`, value: `inactive` },
-                            { label: `Active`, value: `active` },
-                            { label: `Out of Stock`, value: `outofstock` },
+                            { label: `Draft`, value: ProductStatus.Draft },
+                            { label: `In Active`, value: ProductStatus.InActive },
+                            { label: `Active`, value: ProductStatus.Active },
+                            { label: `Out of Stock`, value: ProductStatus.OutOfStock },
                         ]}
                     />
                     <div className='flex flex-col gap-2'>
@@ -72,9 +74,7 @@ const AddProduct = () => {
                             </div>
                             <div className='flex flex-col gap-2'>
                                 <Label>UOM (Unit of Measurement)</Label>
-                                <Select options={[
-                                    { label: `pc`, value: `pc` }
-                                ]} />
+                                <Select options={UOMOptions} />
                             </div>
                         </div>
                         <div className='flex gap-4'>
@@ -95,7 +95,7 @@ const AddProduct = () => {
                     {/* pricing */}
                     <div className='flex flex-col gap-4 p-4 border rounded'>
                         <Label className='font-bold'>Pricing</Label>
-                        <div className='flex flex-col gap-4'>
+                        <div className='flex gap-4'>
                             <div className="flex gap-2">
                                 <div className="flex-1 flex flex-col gap-2">
                                     <Label>Price</Label>

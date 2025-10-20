@@ -1,4 +1,4 @@
-import { dynamic } from "./types/utils";
+import { dynamic, FileInfo } from "@/types/utils";
 
 export enum Store {
     Main = `main`,
@@ -13,7 +13,7 @@ type ProductStore = {
     variants: Array<dynamic>;
     puc: number;
     isup: boolean;
-    media: string[]
+    media: FileInfo[]
 }
 
 
