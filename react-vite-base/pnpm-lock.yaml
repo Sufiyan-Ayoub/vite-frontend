@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@pex-craft/store':
-        specifier: ^2.0.32
-        version: 2.0.32
+        specifier: ^2.0.36
+        version: 2.0.36
       '@radix-ui/react-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -448,8 +448,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@pex-craft/store@2.0.32':
-    resolution: {integrity: sha512-4NanW3YfVw8fnBqetMotPHtwpRL/+ILWbhNp7QObOkOzY00HoAjohTAVZqrPx0zC6D8mrmlMWc/YZ98gB7NFEg==}
+  '@pex-craft/store@2.0.36':
+    resolution: {integrity: sha512-210oLw1BMCdudd53NSopwzGbY+zL3gqL0nydLO2uOoGC4XYh6Cui/B7cU0CbYvNc0GHuY6EeWDHJF7llsmzfag==}
     engines: {node: '>=18.17.0'}
 
   '@radix-ui/number@1.1.1':
@@ -2270,7 +2270,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@pex-craft/store@2.0.32':
+  '@pex-craft/store@2.0.36':
     dependencies:
       react: 19.2.0
 

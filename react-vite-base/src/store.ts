@@ -1,7 +1,19 @@
+import { dynamic } from "./types/utils";
+
 export enum Store {
     Main = `main`,
     User = `user`,
     Products = `products`
+}
+
+
+type ProductStore = {
+    loading: boolean;
+    list: Array<dynamic>;
+    variants: Array<dynamic>;
+    puc: number;
+    isup: boolean;
+    media: string[]
 }
 
 
@@ -12,7 +24,10 @@ export const AppStore = {
         loading: false,
         list: [],
         variants: [],
-    }
+        puc: 0, /// pending uploads
+        isup: false,
+        media: []
+    } as ProductStore
 
     // Users: {
     //     loading: false,

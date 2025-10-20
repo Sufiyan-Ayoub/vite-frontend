@@ -1,3 +1,4 @@
+import { Store } from "@/store"
 import { Button } from "@/ui/button"
 import { Input } from "@/ui/input"
 import { Label } from "@/ui/label"
@@ -9,9 +10,12 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/ui/sheet"
+import { useStore } from "@pex-craft/store"
 import { Plus, UploadIcon } from "lucide-react"
 
 const AddVariant = () => {
+    const { variants, dispatch } = useStore(Store.Products)
+
     return <Sheet>
         <SheetTrigger asChild>
             <Button variant="secondary">

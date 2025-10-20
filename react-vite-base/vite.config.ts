@@ -10,7 +10,7 @@ export default defineConfig({
 		port: 4000,
 		proxy: {
 			'/__': {
-				target: 'http://192.168.0.106:8891',
+				target: 'http://192.168.100.3:8891',
 				changeOrigin: true,
 				rewrite: path => {
 					return path.replace(/^\/__/, '@')
