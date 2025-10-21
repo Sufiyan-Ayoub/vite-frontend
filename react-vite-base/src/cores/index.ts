@@ -1,5 +1,5 @@
 import { dynamic, FileInfo, FileStatus, ToastCallback, ToastType } from "@/types/utils";
-import axios, { AxiosProgressEvent, RawAxiosRequestHeaders } from "axios";
+import axios, { AxiosProgressEvent, Canceler, RawAxiosRequestHeaders } from "axios";
 import { clsx, type ClassValue } from "clsx"
 import { ElementType } from "react";
 import { twMerge } from "tailwind-merge"
@@ -177,8 +177,19 @@ class withGlobals {
 }
 
 export const _ = <T>(value: T) => new withGlobals(value);
+export const withPost = async <T>(
+    uri: string, data: dynamic, 
+    timeout: number = 60, ignoreKind: boolean = false, 
+    headers?: dynamic, onProgress?:(ev: AxiosProgressEvent) => void, 
+    getCanceller?: (canceler: Canceler) => void,
+    cancelable: boolean = false
+) : Promise<T> => {
+    const source = cancelable ? axios.CancelToken.source() : undefined;
 
-export const withPost = async <T>(uri: string, data: dynamic, timeout: number = 60, ignoreKind: boolean = false, headers?: dynamic, onProgress?:(ev: AxiosProgressEvent) => void) : Promise<T> => {
+	if (cancelable && source?.cancel) {
+		getCanceller?.(source.cancel);
+	}
+    
     if (data instanceof FormData) {
         return new Promise((resolve, reject) => {
             axios({
@@ -186,6 +197,7 @@ export const withPost = async <T>(uri: string, data: dynamic, timeout: number = 
                 url: uri,
                 data: data,
                 timeout: timeout * 1000,
+                cancelToken: source ? source.token : undefined,
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     ...(headers || {})
@@ -207,6 +219,7 @@ export const withPost = async <T>(uri: string, data: dynamic, timeout: number = 
         return new Promise((resolve, reject) => {
             axios.post(uri, data, {
                 timeout: 1000 * timeout,
+                cancelToken: source ? source.token : undefined,
                 headers: {
                     'Content-Type': 'application/json',
                     ...(headers || {})
@@ -235,6 +248,7 @@ export const withPost = async <T>(uri: string, data: dynamic, timeout: number = 
                 ...data,
                 __stmp: Date.now()
             }, {
+                cancelToken: source ? source.token : undefined,
                 timeout: 1000 * timeout,
                 headers: {
                     'Content-Type': 'application/json',

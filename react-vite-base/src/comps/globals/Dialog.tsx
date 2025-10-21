@@ -1,34 +1,57 @@
 import { cn } from '@/cores';
 import { Icon } from '@/types/utils';
 import { Button } from '@/ui/button';
-import { 
-    Dialog as LDialog, 
-    DialogContent, 
-    DialogHeader, 
-    DialogTitle, 
-    DialogTrigger, 
-    DialogClose, 
+import {
+    Dialog as LDialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
     DialogFooter
 } from '@/ui/dialog';
-import { FC, ReactNode, useId } from 'react';
+import { forwardRef, ReactNode, useId, useImperativeHandle, useState } from 'react';
 
-const Dialog: FC<{
+export type DialogHandler = {
+    open: () => void;
+    close: () => void;
+}
+
+type DialogProps = {
     trigger?: ReactNode;
     label?: string;
     children: ReactNode;
     as?: string;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
     actions?: {
         label?: string,
         onClick?: () => void;
         variant?: `default` | `destructive` | `outline` | `secondary` | `ghost` | `link`,
         size?: `default` | `sm` | `lg` | `icon`,
-        icon?: Icon 
+        icon?: Icon
     }[]
-}> = ({ trigger, label, children, actions, as }) => {
+}
+
+const Dialog = forwardRef<DialogHandler, DialogProps>(({ trigger, label, children, actions, as, open: controlledOpen, onOpenChange }, ref) => {
     const id = useId()
+    const [internalOpen, setInternalOpen] = useState<boolean>(false);
+
+    const isControlled = controlledOpen !== undefined;
+    const open = isControlled ? controlledOpen : internalOpen;
+
+    const handleOpenChange = (state: boolean) => {
+        if (!isControlled) setInternalOpen(state);
+        if (onOpenChange) onOpenChange(state);
+    };
+
+    // Expose imperative methods
+    useImperativeHandle(ref, () => ({
+        open: () => handleOpenChange(true),
+        close: () => handleOpenChange(false)
+    }));
 
     return (
-        <LDialog>
+        <LDialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 {trigger || <Button size="sm">Open Dialog</Button>}
             </DialogTrigger>
@@ -50,9 +73,9 @@ const Dialog: FC<{
                 {/* Body */}
                 {children || <p className="text-gray-600">Dialog content goes here...</p>}
                 {actions && actions.length > 0 && <DialogFooter>
-                    {actions.map((a, i) => <Button 
-                        key={`dialog-${label}-${id}`} 
-                        variant={a.variant} 
+                    {actions.map((a, i) => <Button
+                        key={`dialog-${label}-${id}`}
+                        variant={a.variant}
                         size={a.size}
                         onClick={a.onClick}
                     >
@@ -63,6 +86,6 @@ const Dialog: FC<{
             </DialogContent>
         </LDialog>
     );
-};
+});
 
 export default Dialog;

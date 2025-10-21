@@ -1,4 +1,5 @@
-import { Store } from "@/store"
+import { getData, toast } from "@/cores"
+import { AppStore, Store } from "@/store"
 import { Button } from "@/ui/button"
 import { Input } from "@/ui/input"
 import { Label } from "@/ui/label"
@@ -12,11 +13,22 @@ import {
 } from "@/ui/sheet"
 import { useStore } from "@pex-craft/store"
 import { Plus, UploadIcon } from "lucide-react"
+import { useRef } from "react"
 
 const AddVariant = () => {
-    const { variants, dispatch } = useStore(Store.Products)
+    const form = useRef<HTMLDivElement>(null)
+    const { variants, flag, dispatch } = useStore<typeof AppStore.Products>(Store.Products)
 
-    return <Sheet>
+    const onSave = () => {
+        if ( !form.current ) return toast.error(`Something went wrong.`)
+        console.log(getData(form.current))
+    }
+
+    return <Sheet onOpenChange={isOpen => {
+        if (!isOpen) {
+            dispatch({ flag: false, vmedia: [] })
+        }
+    }}>
         <SheetTrigger asChild>
             <Button variant="secondary">
                 <Plus size={16} /> Add Variant
@@ -26,14 +38,14 @@ const AddVariant = () => {
             <SheetHeader>
                 <SheetTitle>Add Variant</SheetTitle>
             </SheetHeader>
-            <div className="grid flex-1 auto-rows-min gap-6 px-4">
-                <Button variant={`secondary`} size={`sm`}>
+            <div ref={form} className="grid flex-1 auto-rows-min gap-6 px-4">
+                <Button onClick={() => dispatch({ flag: true })} variant={`secondary`} size={`sm`}>
                     <UploadIcon />
                     Select Variant Image
                 </Button>
                 <div className="grid gap-3">
                     <Label>Variant Name</Label>
-                    <Input type={`text`} placeholder={`Variant name`} />
+                    <Input name="nm" type={`text`} placeholder={`Variant name`} />
                 </div>
                 <div className='flex flex-col gap-4 p-4 border rounded'>
                     <Label>Inventory</Label>
@@ -80,7 +92,7 @@ const AddVariant = () => {
                 </div>
             </div>
             <SheetFooter>
-                <Button type="submit" className='self-start'>Save Changes</Button>
+                <Button onClick={onSave} className='self-start'>Save Changes</Button>
                 {/* <SheetClose asChild>
                     <Button variant="outline">Close</Button>
                 </SheetClose> */}

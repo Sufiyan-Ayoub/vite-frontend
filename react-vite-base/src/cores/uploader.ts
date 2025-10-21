@@ -31,23 +31,46 @@ class Uploader {
         if (file) this.onChange(file);
     }
 
-    cancelRequest(fileId: string){
-        if(this.que.length < 1) return;
-        const _file = this.getFile();
-        if(_file.ID == fileId && typeof _file.cancelRequest === "function"){
-            _file.cancelRequest();
-            this.uploading = !1;
-            return;
+    // cancelRequest(fileId: string){
+    //     if(this.que.length < 1) return;
+    //     const _file = this.getFile();
+    //     if(_file.ID == fileId && typeof _file.cancelRequest === "function"){
+    //         console.log(`>>>`, _file.cancelRequest)
+    //         _file.cancelRequest();
+    //         this.uploading = !1;
+    //         return;
+    //     }
+
+    //     this.onCancel(
+    //         this.que.find((file: FileInfo) => file.ID == fileId)!,
+    //         FileStatus.Canceled
+    //     );
+        
+    //     this.handleQue();
+    // }
+
+    cancelRequest(fileId: string) {
+        console.log(`cancel request submited`)
+        const finx = this.que.findIndex(f => f.ID === fileId);
+        if (finx == -1) return;
+        const file = this.que[finx];
+        if (finx == this.inx && typeof file.cancelRequest === "function") {
+            file.cancelRequest();
+            this.uploading = false;
         }
 
-        
-        this.onCancel(
-            this.que.find((file: FileInfo) => file.ID == fileId)!,
-            FileStatus.Canceled
-        );
-        
-        this.handleQue();
+        // this.onCancel(file, FileStatus.Canceled);
+        this.que.splice(finx, 1);
+
+        if (finx <= this.inx) {
+            this.inx--;
+        }
+
+        if (!this.uploading && this.que.length > this.inx + 1) {
+            this.handleQue();
+        }
     }
+
 
     append(data: dynamic){
         if (!this.data) {
@@ -63,49 +86,39 @@ class Uploader {
     uploadFile(){
         const file = this.getFile();
         if(this.debug) console.log(`UPLOAD_FILE`, file);
-        console.log(`@upload_file_data ->`,this.data[this.inx])
         const fd = new FormData()
         const dd = this.data[this.inx];
         fd.append(`size`, dd.size)
         fd.append(`file`, dd.file)
-        console.log(fd, this.api)
         withPost(
             this.api ||  ``,
             fd,
             undefined, undefined, undefined,
-            // { 
-            //     formdata: true,  
-            //     cancelable: true,
-            //     getCanceller: c => {
-            //         this.getFile().cancelRequest = c
-            //     },
             (p) => {
-                console.log(this.getFile())
-                this.getFile().progress = Math.floor((p.progress || 0) * 100);
+                file.progress = Math.floor((p.progress || 0) * 100);
                 this.notify();
             },
-            //       oncancel: () => {}, 
-            //     oncomplete: () => {}
-            // }
+            c => {
+                file.cancelRequest = c
+            },
+            true
         ).then(response => {
-            console.log(`UPLOAD_SUCCESS`, response, this.getFile())
-            this.getFile().status = FileStatus.Success;
-            this.getFile().cancelRequest = null;
+            file.status = FileStatus.Success;
+            file.cancelRequest = null;
             this.notify();
-            this.onComplete(this.getFile(), response as dynamic);
+            this.onComplete(file, response as dynamic);
             this.uploading = !1;
             this.handleQue();
         })
         .catch(_error => {
-            console.log(`flag --`,_error, this.getFile())
-            this.getFile().status = FileStatus.Error;
-            this.getFile().cancelRequest = null;
+            file.status = FileStatus.Error;
+            file.cancelRequest = null;
             this.notify();
             this.uploading = !1;
             if(_error?.cancelled){
-              this.onCancel(this.getFile(), _error);
+              this.onCancel(file, _error);
             }else{
-              this.onError(this.getFile(), _error);
+              this.onError(file, _error);
             }
             this.handleQue();
         });

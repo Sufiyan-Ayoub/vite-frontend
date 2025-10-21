@@ -13,7 +13,10 @@ type ProductStore = {
     variants: Array<dynamic>;
     puc: number;
     isup: boolean;
-    media: FileInfo[]
+    media: FileInfo[];
+    defaultMedia: string[];
+    flag: boolean;
+    vmedia: string[];
 }
 
 
@@ -26,7 +29,10 @@ export const AppStore = {
         variants: [],
         puc: 0, /// pending uploads
         isup: false,
-        media: []
+        media: [],
+        defaultMedia: [],
+        flag: false,
+        vmedia: []
     } as ProductStore
 
     // Users: {
