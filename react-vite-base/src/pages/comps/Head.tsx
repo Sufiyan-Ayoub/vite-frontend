@@ -2,7 +2,7 @@ import { Icon } from "@/types/utils"
 import { Button } from "@/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { FC, MouseEvent } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 type HeadProps = {
     label?: string,
@@ -12,9 +12,16 @@ type HeadProps = {
         onClick: (e: MouseEvent<HTMLElement>) => void,
         icon?: Icon
     }[]
+    links?: {
+        label: string;
+        uri: string;
+        icon?: Icon; 
+    }[]
 }
 
-const Head : FC<HeadProps> = ({ label, uri, actions }) => {
+const Head : FC<HeadProps> = ({ label, uri, actions, links }) => {
+    const navigate = useNavigate();
+
     return (
         <div className="page-header flex border-b min-h-[50px] px-4 py-2">
             <div className="flex-1 flex items-center">
@@ -32,6 +39,12 @@ const Head : FC<HeadProps> = ({ label, uri, actions }) => {
                 <div className="flex-1 flex items-center justify-end gap-2">
                     {actions?.map((o, i) => (
                         <Button key={`action-${i}-${o.label}`} onClick={o.onClick} size={`sm`}>
+                            {o.icon && <o.icon className="w-4 h-4 mr-2" />}
+                            {o.label}
+                        </Button>
+                    ))}
+                    {links?.map((o, i) => (
+                        <Button key={`action-${i}-${o.label}`} onClick={() => navigate(o.uri)} size={`sm`}>
                             {o.icon && <o.icon className="w-4 h-4 mr-2" />}
                             {o.label}
                         </Button>
