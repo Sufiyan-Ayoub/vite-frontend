@@ -69,7 +69,7 @@ const dummyData: Product[] = [
 	{ id: 3, name: 'Product C', price: 15, stock: 100 },
 
 ];
-const ProductList = () => {
+const BrandList = () => {
 	const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
 
 	const cols = [
@@ -118,4 +118,4 @@ const ProductList = () => {
 	)
 }
 
-export default ProductList
+export default BrandList

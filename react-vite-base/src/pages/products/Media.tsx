@@ -3,7 +3,7 @@ import { Dialog } from '@/comps'
 import { CircleX, Eye, ListChecks, Trash2, Undo2, UploadIcon } from 'lucide-react'
 import { FC, useEffect, useId, useRef, useState } from 'react'
 import { getFileInfo, toast, Uploader } from '@/cores'
-import { dynamic, FileInfo } from '@/types/utils'
+import { dynamic, FileInfo, FileStatus } from '@/types/utils'
 import { getStore, useStore } from '@pex-craft/store'
 import { AppStore, Store } from '@/store'
 import { ButtonGroup } from '@/ui/button-group'
@@ -35,7 +35,7 @@ const ImageCover: FC<{ file: FileInfo, cancelUpload: (id: string) => void }> = (
             </> : <Button onClick={() => cancelUpload(file.ID)}><CircleX className='size-[20px] text-white' /></Button>}
         </div>
         <img src={!file.url ? file.uri : `/__/m?n=${file.url}`} className={`w-full h-full bg-[#ddd] object-contain ${file.url ? `blur-in-sm`: ``}`}  />
-        {file.progress != undefined && file.progress >= 0 && file.progress <= 100 && 
+        {((file.progress != undefined && file.progress >= 0 && file.progress <= 100) || (file.status ?? 0) < 1) && 
         <div className="absolute inset-0 w-full h-full flex justify-center items-center">
             <div className='progress bg-[#eee] flex items-center justify-center rounded-2xl h-[18px] text-sm font-medium w-[50px]'>0%</div>
         </div>
@@ -98,6 +98,7 @@ const Media: FC = () => {
             const img = node.querySelector(`img`);
             if(img) img.style.filter = `blur(${2 * (1 - ((file.progress ?? 0) / 100))}px)`;
             const progress = node.querySelector(`.progress`) as HTMLElement;
+            console.log(`progress>>.`,progress)
             if(progress) progress.innerText = `${file.progress}%`;
         }
     }
@@ -107,7 +108,7 @@ const Media: FC = () => {
         dispatch({
             isup: !((_puc - 1) <= 0),
             puc: _puc - 1,
-            media: _media.map(m => m.ID == f.ID ? ({ ...f, ID: resp.dt, url: resp.i }) : m)
+            media: _media.map(m => m.ID == f.ID ? ({ ...f, progress: 100,ID: resp.dt, url: resp.i }) : m)
         })
     }
 
@@ -138,13 +139,16 @@ const Media: FC = () => {
 
 
     useEffect(() => {
-        if ( flag && dialog.current ) dialog.current?.open()
+        console.log(flag, dialog.current)
+        if ( flag && dialog.current ) {
+            dialog.current?.open()
+        }
     }, [flag])
 
     return (
         <div className='flex flex-col gap-2 justify-center min-h-[170px] items-center bg-input border border-border border-dashed rounded'>
             <input id={`mng-media`} ref={fileRef} multiple type={`file`} accept='image/*' className='hidden' onChange={onfileSelect} />
-            {media.length > 0 && <Dialog
+            {(flag || media.length > 0) && <Dialog
                 ref={dialog}
                 onOpenChange={(state) => {
                     if ( flag ){

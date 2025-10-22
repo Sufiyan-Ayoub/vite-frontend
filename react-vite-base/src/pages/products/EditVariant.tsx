@@ -12,14 +12,16 @@ import {
     SheetTrigger,
 } from "@/ui/sheet"
 import { useStore } from "@pex-craft/store"
-import { Plus, UploadIcon } from "lucide-react"
-import { useRef, useState } from "react"
+import { Edit2, Plus, UploadIcon } from "lucide-react"
+import { FC, useEffect, useRef, useState } from "react"
 
-const AddVariant = () => {
+const EditVariant : FC<{ ID: string }> = ({ ID }) => {
     const form = useRef<HTMLDivElement>(null)
-    const { variants, vmedia, flag, dispatch } = useStore<typeof AppStore.Products>(Store.Products)
-    const [price, setPrice] = useState<number>(0);
-    const [costPerItem, setCostPerItem] = useState<number>(0);
+    const { variants,vmedia, flag, dispatch } = useStore<typeof AppStore.Products>(Store.Products)
+    const variant = variants.find(v => v.ID == ID);
+
+    const [price, setPrice] = useState<number>(variant?.price || 0);
+    const [costPerItem, setCostPerItem] = useState<number>(variant?.costPerItem || 0);
 
     const profit = price - costPerItem;
     const margin = price > 0 ? ((profit / price) * 100).toFixed(2) : "0";
@@ -44,26 +46,29 @@ const AddVariant = () => {
         }
 
         dispatch({
-            variants: [
-                ...variants,
+            variants: variants.map(v => v.ID == ID ? 
                 {
-                    ID: uuid(6),
-                    nm,
+                    ID,
                     media: vmedia,
+                    nm,
                     stock: Number(stock),
                     sku,
                     barcode,
                     minStock: minStock ? Number(minStock) : undefined,
                     maxStock: maxStock ? Number(maxStock) : undefined,
                     price: Number(price),
-                    costPerItem: Number(costPerItem),
-                }
-            ],
+                costPerItem: Number(costPerItem),
+            } : v),
             vmedia: []
         })
-        toast.success("Variant added successfully.");
+        // When a variant is updated
+        toast.success("Variant updated successfully.");
 
     };
+
+    useEffect(() => {
+        dispatch({ vmedia: variant?.media })
+    }, [])
 
 
     return <Sheet onOpenChange={isOpen => {
@@ -72,13 +77,13 @@ const AddVariant = () => {
         }
     }}>
         <SheetTrigger asChild>
-            <Button variant="secondary">
-                <Plus size={16} /> Add Variant
+            <Button variant="secondary" size="sm" title="Edit Variant">
+                <Edit2 size={16} />
             </Button>
         </SheetTrigger>
         <SheetContent>
             <SheetHeader>
-                <SheetTitle>Add Variant</SheetTitle>
+                <SheetTitle>Edit Variant</SheetTitle>
             </SheetHeader>
             <div ref={form} className="grid flex-1 auto-rows-min gap-6 px-4">
                 <Button onClick={() => dispatch({ flag: true })} variant={`secondary`} size={`sm`}>
@@ -87,16 +92,16 @@ const AddVariant = () => {
                 </Button>
                 <div className="grid gap-3">
                     <Label>Variant Name</Label>
-                    <Input name="nm" type={`text`} placeholder={`Variant name`} />
+                    <Input defaultValue={variant?.nm} name="nm" type={`text`} placeholder={`Variant name`} />
                 </div>
                 <div className='flex flex-col gap-4 p-4 border rounded'>
                     <Label>Inventory</Label>
                     <div className='flex flex-col gap-2'>
-                        <Input type='number' name={`stock`} placeholder={`Quantity`} />
-                        <Input name={`sku`} placeholder={`SKU (optional)`} />
-                        <Input name={`barcode`} placeholder={`Barcode (optional)`} />
-                        <Input type='number' name={`minstock`} placeholder='Min Stock (optional)' />
-                        <Input type='number' name={`maxstock`} placeholder='Max Stock (optinoal)' />
+                        <Input defaultValue={variant?.stock} type='number' name={`stock`} placeholder={`Quantity`} />
+                        <Input defaultValue={variant?.sku}  name={`sku`} placeholder={`SKU (optional)`} />
+                        <Input defaultValue={variant?.barcode} name={`barcode`} placeholder={`Barcode (optional)`} />
+                        <Input defaultValue={variant?.minStock} type='number' name={`minstock`} placeholder='Min Stock (optional)' />
+                        <Input defaultValue={variant?.maxStock} type='number' name={`maxstock`} placeholder='Max Stock (optinoal)' />
                     </div>
                 </div>
                 {/* pricing */}
@@ -111,7 +116,7 @@ const AddVariant = () => {
                     <Label className='font-bold'>Pricing</Label>
                     <div className='flex flex-col gap-4'>
                         <div className="flex gap-2">
-                            <div className="flex-1 flex flex-col gap-2">
+                           <div className="flex-1 flex flex-col gap-2">
                                 <Label>Price</Label>
                                 <Input type={`number`} name={`price`} value={price} onChange={(e) => setPrice(Number(e.target.value))} placeholder={`Price`} />
                             </div>
@@ -142,4 +147,4 @@ const AddVariant = () => {
         </SheetContent>
     </Sheet>
 }
-export default AddVariant
+export default EditVariant

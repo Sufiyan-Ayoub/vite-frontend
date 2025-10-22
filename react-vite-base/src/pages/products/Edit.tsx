@@ -16,7 +16,7 @@ import { Edit2, Trash2 } from 'lucide-react'
 import { Badge } from '@/ui/badge'
 import EditVariant from './EditVariant'
 
-const AddProduct = () => {
+const EditProduct = () => {
     const form = useRef<HTMLDivElement>(null);
     const { media, variants, dispatch } = useStore<typeof AppStore.Products>(Store.Products)
     const [price, setPrice] = useState<number>(0);
@@ -188,4 +188,4 @@ const AddProduct = () => {
     )
 }
 
-export default AddProduct
+export default EditProduct

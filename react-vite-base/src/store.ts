@@ -10,7 +10,18 @@ export enum Store {
 type ProductStore = {
     loading: boolean;
     list: Array<dynamic>;
-    variants: Array<dynamic>;
+    variants: Array<{
+        ID: string;
+        nm: string;
+        media: string;
+        stock: string;
+        sku?: string;
+        barcode?: string;
+        minStock?: string;
+        maxStock?: string;
+        price: number;
+        costPerItem: number;
+    }>;
     puc: number;
     isup: boolean;
     media: FileInfo[];

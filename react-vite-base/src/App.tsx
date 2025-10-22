@@ -47,7 +47,10 @@ const router = createBrowserRouter(
 					{/* <Route path=":id" element={<ProductsDetail />} />
 					<Route path=":id/edit" element={<ProductsEdit />} /> */}
 				</Route>
-					
+				{/* <Route path='branches' element={}>
+					<Route index element={<ProductList />} />
+					<Route path="create" element={<AddProduct />} />
+				</Route> */}
 			</Route>
 
 			{/* <Route path={`/admin`} elemen={} errorElement={<ErrorRoot />} >

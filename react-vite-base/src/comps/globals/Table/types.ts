@@ -8,6 +8,7 @@ export type Column<T> = {
 export type TableProps<T> = {
     cols: Column<T>[];
     list: T[];
+    pageSize?: number;
     striped?: boolean;
     selectable: boolean;
     onSelect: (rows: T[]) => void;

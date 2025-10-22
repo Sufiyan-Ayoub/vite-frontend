@@ -1,5 +1,5 @@
 import { APP_NAME } from "@/config"
-import { BadgePercent, BookOpenText, DatabaseZapIcon, House, TagsIcon, Target, Users2 } from "lucide-react"
+import { BadgePercent, BookOpenText, DatabaseZapIcon, House, Store, TagsIcon, Target, Users2 } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const Sidebar = () => {
@@ -11,6 +11,7 @@ const Sidebar = () => {
         { label: `Customers`, uri: `/products`, icon: Users2 },
         { label: `Marketing`, uri: `/products`, icon: Target },
         { label: `Discounts`, uri: `/discounts`, icon: BadgePercent },
+        { label: `Branches`, uri: `/branches`, icon: Store }    
     ]
 
     return (
