@@ -1,109 +1,85 @@
-import { Button } from "@/ui/button";
-import { Menu, X } from "lucide-react";
-import { useMemo, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Cloud, Home } from 'lucide-react'
+import  { useMemo } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { cn } from '@/cores'
+import { useAnim, useMounted } from '@/cores/hooks'
+import { TRANSITION_CURVES, TRANSITIONS } from '../globals/Anim/enums'
 
 const Header = () => {
-	const navigate = useNavigate();
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const { pathname } = useLocation();
+	const mounted = useMounted();
+	const anim = useAnim({
+		transition: TRANSITIONS.SlideTop,
+		curve: TRANSITION_CURVES.Bounce,
+		when: mounted,
+		duration: 1
+	});
+
+	const anchorCss = `nav-anchor absolute -bottom-2 left-1/2 w-[20px] h-[2px] bg-muted-foreground opacity-0 rounded -translate-x-1/2 translate-y-0 transition-none group-hover:transition-all duration-500 ease-bounce
+		group-hover:-translate-y-1 group-hover:h-[4px] group-hover:opacity-100
+		group-[.active]:-translate-y-1 group-[.active]:h-[4px] group-[.active]:opacity-100 group-[.active]:bg-primary`;
+	const navCss = `group relative flex flex-col items-center transition-all duration-500`
+	const navLabel = `transition-all duration-500 font-medium group-[.active]:font-bold text-foreground group-[.active]:text-primary`;
+
 	const nav = useMemo(() => [
-		{ label: `Home`, uri: `/` },
-		{ label: `Features`, uri: `/features` },
+		{ label: `Home`, uri: `/`, icon: Home },
 		{ label: `Pricing`, uri: `/pricing` },
+		{ label: `Features`, uri: `/features` },
 		{ label: `About`, uri: `/about` },
 		{ label: `Support`, uri: `/support` },
-	],[])
-	const toggleMobileMenu = () => {
-		setIsMobileMenuOpen(!isMobileMenuOpen);
-	};
+	], [])
 
 	return (
-		<div className="app-header w-screen h-[70px] flex items-center justify-between px-4 bg-background border-b border-border sticky top-0 z-50">
-			{/* Logo Section */}
-			<div className="flex-1">
-				<div className="text-xl font-bold  cursor-pointer transition-colors">
+		<div className="flex z-50 text-primary items-center px-[60px] py-[15px] h-[50px]">
+			<div className="--logo flex-1 flex items-center">
+				<Link style={anim()} to="/" className="font-black flex items-center gap-2 text-xl">
+					<Cloud className='size-7' />
 					Cloud POS
-				</div>
+				</Link>
 			</div>
-
-			{/* Desktop Navigation Section - Hidden on mobile */}
-			<div className="hidden md:flex flex-1 items-center justify-center space-x-8">
+				
+			<div className="--nav flex-1 text-foreground flex items-center justify-center gap-6 relative">
 				{nav.map((o, i) => (
 					<Link
 						key={`nav-${i}-${o.uri}`}
 						to={o.uri}
-						className=" text-sm font-medium px-3 py-2 transition-colors rounded-md hover:bg-[var(--primary-color)]/5"
+						style={anim(i == 0 ? 1.25 * i : 0.15 * i)}
+						className={`${navCss} ${pathname == o.uri ? `active`: ``}`}
 					>
-						{o.label}
+						<span className={navLabel}>
+							{o.label}
+						</span>
+
+						<span
+							aria-hidden="true"
+							className={anchorCss}
+						></span>
 					</Link>
 				))}
 			</div>
 
-			{/* Desktop User Actions Section - Hidden on mobile */}
-			<div className="hidden md:flex flex-1 items-center justify-end">
-				<div className="flex items-center space-x-4">
-					<Link
-						to="/u/signin"
-						className=" text-sm font-medium hover:text-[var(--primary-color)] px-3 py-2 transition-colors"
-					>
-						Login
-					</Link>
-					<Button
-						onClick={() => { navigate(`/u/signup`);setIsMobileMenuOpen(false)}}							>
-						Create Account
-					</Button>
-				</div>
-			</div>
-
-			{/* Mobile Hamburger Button */}
-			<div className="md:hidden flex flex-1 justify-end">
-				<button
-					onClick={toggleMobileMenu}
-					className="focus:outline-none transition-colors"
-					aria-label="Toggle menu"
-				>
-					<Menu size={24} strokeWidth={2} />
-				</button>
-			</div>
-
-			{/* Mobile Menu - Full screen overlay */}
-			{isMobileMenuOpen && (
-				<div className="fixed inset-0 bg-background z-40 md:hidden flex flex-col items-center justify-center space-y-6 p-4">
-					<button
-						onClick={toggleMobileMenu}
-						className="absolute top-4 right-4 focus:outline-none transition-colors"
-					>
-						<X size={24} strokeWidth={2} />
-					</button>
-					<div className="space-y-4 w-full max-w-md">
-						{nav.map((o, i) => (
-							<Link
-								key={`nav-${i}-${o.uri}`}
-								to={o.uri}
-								className="block text-lg font-medium py-2 text-center transition-colors"
-								onClick={() => setIsMobileMenuOpen(false)}
-							>
-								{o.label}
-							</Link>
-						))}
-						<div className="flex flex-col space-y-4 pt-4 border-t">
-							<Link
-								to="/u/signin"
-								className=" text-lg font-medium py-2 text-center transition-colors"
-								onClick={() => setIsMobileMenuOpen(false)}
-							>
+			<div className="--user flex-1 flex items-center justify-end">
+					<div className="flex items-center space-x-4">
+						<Link
+							to={`/u/signin`}
+							style={anim(0.5)}
+							className={cn(navCss, `transition-transform`)}
+						>
+							<span className={navLabel}>
 								Login
-							</Link>
-							<Button
-								onClick={() => { navigate(`/u/signup`);setIsMobileMenuOpen(false)}}							>
-								Create Account
-							</Button>
-						</div>
-					</div>
-				</div>
-			)}
-		</div>
-	);
-};
+							</span>
 
-export default Header;
+							<span
+								aria-hidden="true"
+								className={anchorCss}
+							></span>
+						</Link>
+						{/* <Button style={anim(.55)}>Create Account</Button> */}
+						<Link to={`/u/signup`} style={anim(.6)} className='btn-link'>Create Account</Link>
+					</div>
+			</div>
+		</div>
+	)
+}
+
+export default Header

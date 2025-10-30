@@ -3,6 +3,7 @@ import Table from '@/comps/globals/Table';
 import { Head } from '@/pages/comps'
 import { ProductStatus } from '@/types';
 import { useState } from 'react';
+import AddBranch from './AddBranch';
 interface Product {
 	id: number;
 	name: string;
@@ -69,7 +70,7 @@ const dummyData: Product[] = [
 	{ id: 3, name: 'Product C', price: 15, stock: 100 },
 
 ];
-const ProductList = () => {
+const BranchList = () => {
 	const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
 
 	const cols = [
@@ -87,9 +88,9 @@ const ProductList = () => {
 	return (
 		<div className='flex-1 flex flex-col space-y-4'>
 			<Head
-				label={`Products`}
+				label={`Branches`}
 				links={[
-					{ label: `Add Product`, uri: `/dashboard/products/create` }
+					{ label: `Add Branch`, uri: `/dashboard/branches/create`}
 				]}
 			/>
 			<div className='overflow-y-auto max-h-[calc(100vh - 50px)] px-4 space-y-4'>
@@ -118,4 +119,4 @@ const ProductList = () => {
 	)
 }
 
-export default ProductList
+export default BranchList

@@ -3,7 +3,8 @@ import { dynamic, FileInfo } from "@/types/utils";
 export enum Store {
     Main = `main`,
     User = `user`,
-    Products = `products`
+    Products = `products`,
+    Branches = `Branches`
 }
 
 
@@ -30,7 +31,6 @@ type ProductStore = {
     vmedia: string[];
 }
 
-
 export const AppStore = {
     // App,
     // User, //Authenticaation
@@ -44,8 +44,10 @@ export const AppStore = {
         defaultMedia: [],
         flag: false,
         vmedia: []
-    } as ProductStore
-
+    } as ProductStore,
+    Branches: {
+        list: []
+    }
     // Users: {
     //     loading: false,
     //     error: null as string | null,

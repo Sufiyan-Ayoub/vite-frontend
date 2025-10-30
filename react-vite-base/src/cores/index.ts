@@ -3,7 +3,7 @@ import axios, { AxiosProgressEvent, Canceler, RawAxiosRequestHeaders } from "axi
 import { clsx, type ClassValue } from "clsx"
 import { ElementType } from "react";
 import { twMerge } from "tailwind-merge"
-
+import Cookies from "js-cookie"
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
 }
@@ -315,5 +315,10 @@ export const getFileInfo = (f: File, ID?: string): FileInfo => ({
   url: null,
   status: FileStatus.InQue,
 });
+
+
+export const setCookie = (key: string, value: string, expiry?: number) => Cookies.set(key, value, { expires: expiry || 7 });
+export const getCookie = (key: string) => key == `` ? Cookies.get() : Cookies.get(key) || null;
+export const removeCookie = (key: string) => Cookies.remove(key);
 
 export {default as Uploader} from './uploader'

@@ -1,4 +1,4 @@
-import packageJson from "../package.json"
+// import packageJson from "../package.json"
 import { Uom } from "@/types"
 
 export const APP_NAME = `Cloud POS`
@@ -6,7 +6,7 @@ export const APP_TAGLINE = ``
 export const APP_DESCRIPTION = ``
 export const APP_URL = ``
 export const API_URL = ``
-export const APP_VERSION = packageJson.version
+// export const APP_VERSION = packageJson.version
 
 export const SUPPORT_EMAIL = ``;
 

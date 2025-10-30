@@ -6,4 +6,6 @@ export {default as TabSelect} from './globals/TabSelect'
 export {default as Select} from './globals/Select'
 export {default as Table} from './globals/Table'
 export {default as Dialog} from './globals/Dialog'
+export {default as I} from "./globals/I"
 export * from "./globals/cover/types"
+export * from './globals/anims'

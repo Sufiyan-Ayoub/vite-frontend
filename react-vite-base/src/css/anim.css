@@ -1,0 +1,140 @@
+@keyframes fadeInScale {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes initialAnim {
+    from {
+        transform: scale(0) rotate(-90deg);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1.1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes swing {
+    from {
+        transform: scale(1.1) rotate(0deg);
+    }
+
+    to {
+        transform: scale(1.1) rotate(5deg);
+    }
+}
+
+@keyframes lightning {
+    0% {
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    10% {
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    20% {
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    45% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+
+}
+
+@keyframes blurRandom {
+    0% {
+        filter: blur(0px);
+    }
+
+    20% {
+        filter: blur(7px);
+    }
+
+    40% {
+        filter: blur(10px);
+    }
+
+    60% {
+        filter: blur(6px);
+    }
+
+    80% {
+        filter: blur(15px);
+    }
+
+    100% {
+        filter: blur(2px);
+    }
+}
+
+@keyframes cloud {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(0, -15px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes cloudscale {
+    0% {
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        transform: translate(-50%, -5px) scale(0.95);
+    }
+
+    100% {
+        transform: translate(-50%, 0);
+    }
+}

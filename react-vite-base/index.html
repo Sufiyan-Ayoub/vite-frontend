@@ -3,13 +3,18 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<style id="--i-app-styles">
-		body{
-			background: #e7eaf3;
-			color: #020618;
-			font-family: sans-serif;
+		#--st-app-loader{
+			background-color: #ebedf2;
+			position: fixed;
+			inset: 0;
+			width: 100vw;
+			height: 100vh;
+			z-index: 10000;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 		.loader {
 			position: fixed;
@@ -17,6 +22,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			z-index: 100;
 		}
 
 		.icon {
@@ -34,10 +40,13 @@
 		}
 
 		@keyframes spin {
-			to { transform: rotate(360deg); }
+			to {
+				transform: rotate(360deg);
+			}
 		}
 	</style>
 	<title>Cloud POS</title>
+	<!--app-head-->
 </head>
 
 <body>
@@ -65,9 +74,8 @@
 		</svg>
 		<span class="loading-text">Loading...</span>
 	</div>
-
-	<div id="root"></div>
-	<script type="module" src="/src/main.tsx"></script>
+	<div id="root"><!--app-html--></div>
+	<script type="module" src="/src/entry-client.tsx"></script>
 </body>
 
 </html>

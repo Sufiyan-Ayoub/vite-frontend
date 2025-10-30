@@ -12,13 +12,13 @@ type Option = {
     label: string;
 }
 
-const Select : FC<{options?: Option[], defaultValue?: string, name?: string }> = ({ options, defaultValue, name }) => {
+const Select : FC<{options?: Option[], defaultValue?: string, name?: string, placeholder: string }> = ({ placeholder, options, defaultValue, name }) => {
     const [value, setValue] = useState<number | string | undefined>(defaultValue);
     return (
         <>
             <LSelect value={value?.toString()} onValueChange={val => setValue(val)}>
                 <SelectTrigger className="w-full bg-input border-border">
-                    <SelectValue placeholder="Select UOM" />
+                    <SelectValue placeholder={placeholder || "Select"} />
                 </SelectTrigger>
                 <SelectContent>
                     {options && options.length > 0 ? options?.map((option) => (

@@ -1,12 +1,13 @@
 import { Icon } from "@/types/utils"
 import { Button } from "@/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { FC, MouseEvent } from "react"
+import { FC, MouseEvent, ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
 type HeadProps = {
     label?: string,
     uri?: string,
+    sheets?: ReactNode[],
     actions?: {
         label: string,
         onClick: (e: MouseEvent<HTMLElement>) => void,
@@ -19,7 +20,7 @@ type HeadProps = {
     }[]
 }
 
-const Head : FC<HeadProps> = ({ label, uri, actions, links }) => {
+const Head : FC<HeadProps> = ({ label, uri, actions, links, sheets }) => {
     const navigate = useNavigate();
 
     return (
@@ -49,6 +50,7 @@ const Head : FC<HeadProps> = ({ label, uri, actions, links }) => {
                             {o.label}
                         </Button>
                     ))}
+                    {sheets?.map(sheet => sheet)}
                 </div>
             </div>
         </div>

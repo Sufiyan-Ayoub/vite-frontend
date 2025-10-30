@@ -3,6 +3,7 @@
 // import { useNavigate, useRouter } from '@tanstack/react-router'
 import { cn } from '@/cores'
 import { Button } from '@/ui/button'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 type GeneralErrorProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -16,8 +17,14 @@ export default function GeneralError({
 	const navigate = useNavigate()
 	const location = useLocation()
 	const isHome = location.pathname === "/"
-	const canGoBack = window.history.length > 1 && !isHome
+	const [canGoBack, setCanGoBack] = useState(false)
 
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			setCanGoBack(window.history.length > 1 && !isHome)
+		}
+	}, [isHome])
+	
 	return (
 		<div className={cn('h-svh w-full', className)}>
 			<div className='m-auto flex h-full w-full flex-col items-center justify-center gap-2'>
